@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -7,6 +8,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:travel_planner/apikey.dart';
 import 'package:travel_planner/functions/getStringfromList.dart';
 import 'package:travel_planner/responsive/responsive.dart';
+import 'package:travel_planner/screens/travelPage.dart';
 import 'package:travel_planner/widgets/toggleIcon.dart';
 import 'package:http/http.dart' as http;
 
@@ -824,6 +826,26 @@ class _HomePageState extends State<HomePage> {
                                                 travelPlan =
                                                     itinerary.toString();
                                               });
+
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) {
+                                                  return TravelPage(
+                                                    destination:
+                                                        destinationController
+                                                            .text,
+                                                    startDate:
+                                                        startDateController
+                                                            .text,
+                                                    endDate:
+                                                        endDateController.text,
+                                                    budget:
+                                                        budgetController.text,
+                                                    travelPlan: travelPlan,
+                                                  );
+                                                }),
+                                              );
                                             } else {
                                               await showDialog(
                                                 context: context,
@@ -849,14 +871,23 @@ class _HomePageState extends State<HomePage> {
                                             isLoading = false;
                                             setState(() {});
                                           },
-                                          child: Text(
-                                            'Generate Travel Plan',
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w600,
-                                              color: Color(0xFFFFFFFF),
-                                            ),
-                                          ),
+                                          child: isLoading
+                                              ? SizedBox(
+                                                  width: 24,
+                                                  height: 24,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    color: Color(0xFFFFFFFF),
+                                                  ),
+                                                )
+                                              : Text(
+                                                  'Generate Travel Plan',
+                                                  style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: Color(0xFFFFFFFF),
+                                                  ),
+                                                ),
                                           style: ElevatedButton.styleFrom(
                                             fixedSize: Size.fromHeight(52),
                                             padding:
@@ -889,6 +920,33 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
+          if (responsiveVisibility(
+            context: context,
+            phone: false,
+            tablet: false,
+          ))
+            Container(
+              width: 100,
+              height: 300,
+              decoration: BoxDecoration(
+                color: Color(0xFF1D2429),
+              ),
+            ),
+          if (responsiveVisibility(
+            context: context,
+            phone: false,
+            tablet: false,
+            tabletLandscape: false,
+          ))
+            CachedNetworkImage(
+              fadeInDuration: Duration(milliseconds: 500),
+              fadeOutDuration: Duration(milliseconds: 500),
+              imageUrl:
+                  'https://images.unsplash.com/photo-1585506942812-e72b29cef752?q=80&w=1928&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+              width: 630,
+              height: double.infinity,
+              fit: BoxFit.cover,
+            ),
         ],
       ),
     );
