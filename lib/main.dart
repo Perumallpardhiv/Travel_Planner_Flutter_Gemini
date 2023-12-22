@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:travel_planner/screens/homePage.dart';
-import 'package:travel_planner/screens/travelPage.dart';
 
 void main() {
   runApp(const MyApp());
