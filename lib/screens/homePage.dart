@@ -1,7 +1,8 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
+import 'package:table_calendar/table_calendar.dart';
 import 'package:travel_planner/responsive/responsive.dart';
 import 'package:travel_planner/widgets/toggleIcon.dart';
 
@@ -19,10 +20,14 @@ class _HomePageState extends State<HomePage> {
   String travelPrompt = '';
   String travelPlan = '';
 
+  late DateTime _focusedDay1;
+  late DateTime _focusedDay2;
   late TextEditingController destinationController;
   late FocusNode destinationFocusNode;
+  late DateTime selectedDay1;
   late TextEditingController startDateController;
   late FocusNode startDateFocusNode;
+  late DateTime selectedDay2;
   late TextEditingController endDateController;
   late FocusNode endDateFocusNode;
   late TextEditingController budgetController;
@@ -30,6 +35,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    _focusedDay1 = DateTime.now();
+    _focusedDay2 = DateTime.now();
     destinationController = TextEditingController();
     destinationFocusNode = FocusNode();
     startDateController = TextEditingController();
@@ -38,6 +45,8 @@ class _HomePageState extends State<HomePage> {
     endDateFocusNode = FocusNode();
     budgetController = TextEditingController();
     budgetFocusNode = FocusNode();
+    selectedDay1 = DateTime.now();
+    selectedDay2 = DateTime.now();
     super.initState();
   }
 
@@ -235,6 +244,329 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                 ),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 16, 0, 0),
+                                  child: Text(
+                                    'Start Date',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      color: Color(0xFFFFFFFF),
+                                    ),
+                                  ),
+                                ),
+                                TableCalendar(
+                                  focusedDay: _focusedDay1,
+                                  firstDay: DateTime.utc(2020, 12, 31),
+                                  lastDay: DateTime.utc(2030, 12, 31),
+                                  calendarFormat: CalendarFormat.week,
+                                  startingDayOfWeek: StartingDayOfWeek.monday,
+                                  rowHeight: 64,
+                                  daysOfWeekVisible: true,
+                                  selectedDayPredicate: (day) {
+                                    return isSameDay(selectedDay1, day);
+                                  },
+                                  onDaySelected: (selectedDay, focusedDay) {
+                                    _focusedDay1 = focusedDay;
+                                    selectedDay1 = selectedDay;
+                                    startDateController.text =
+                                        DateFormat('yMMMd').format(selectedDay);
+                                    print(startDateController.text);
+                                    setState(() {});
+                                  },
+                                  headerStyle: HeaderStyle(
+                                    titleCentered: true,
+                                    formatButtonVisible: false,
+                                    titleTextStyle: TextStyle(
+                                      color: Color(0xFFFFFFFF),
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 18,
+                                    ),
+                                    leftChevronIcon: Icon(
+                                      Icons.chevron_left,
+                                      color: Color(0xFF658593),
+                                      size: 20,
+                                    ),
+                                    rightChevronIcon: Icon(
+                                      Icons.chevron_right,
+                                      color: Color(0xFF658593),
+                                      size: 20,
+                                    ),
+                                  ),
+                                  daysOfWeekStyle: DaysOfWeekStyle(
+                                    weekdayStyle: TextStyle(
+                                      color: Color(0xFFFFFFFF),
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14,
+                                    ),
+                                    weekendStyle: TextStyle(
+                                      color: Color(0xFFFFFFFF),
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  calendarStyle: CalendarStyle(
+                                    weekendTextStyle: TextStyle(
+                                      color: Color(0xFFFFFFFF),
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14,
+                                    ),
+                                    defaultTextStyle: TextStyle(
+                                      color: Color(0xFFFFFFFF),
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14,
+                                    ),
+                                    todayTextStyle: TextStyle(
+                                      color: Color(0xFFFFFFFF),
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14,
+                                    ),
+                                    outsideTextStyle: TextStyle(
+                                      color: Color(0xFFFFFFFF),
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 10,
+                                    ),
+                                    selectedTextStyle: TextStyle(
+                                      color: Color(0xFF658593),
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16,
+                                    ),
+                                    selectedDecoration: BoxDecoration(
+                                      color: Color(0xFF7CFFB2),
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 16),
+                                  child: TextFormField(
+                                    controller: startDateController,
+                                    focusNode: startDateFocusNode,
+                                    autofocus: true,
+                                    readOnly: true,
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                      hintText: 'Start date',
+                                      hintStyle: TextStyle(
+                                        color: Color(0xFF658593),
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 18,
+                                      ),
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0xFF293238),
+                                          width: 2,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(4.0),
+                                          topRight: Radius.circular(4.0),
+                                        ),
+                                      ),
+                                      focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0xFF4b986c),
+                                          width: 2,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(4.0),
+                                          topRight: Radius.circular(4.0),
+                                        ),
+                                      ),
+                                      errorBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0xFFff5963),
+                                          width: 2,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(4.0),
+                                          topRight: Radius.circular(4.0),
+                                        ),
+                                      ),
+                                      focusedErrorBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0xFFff5963),
+                                          width: 2,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(4.0),
+                                          topRight: Radius.circular(4.0),
+                                        ),
+                                      ),
+                                      contentPadding:
+                                          EdgeInsetsDirectional.fromSTEB(
+                                              0, 24, 0, 24),
+                                    ),
+                                    style: TextStyle(
+                                      color: Color(0xFFFFFFFF),
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 16, 0, 0),
+                                  child: Text(
+                                    'End Date',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      color: Color(0xFFFFFFFF),
+                                    ),
+                                  ),
+                                ),
+                                TableCalendar(
+                                  focusedDay: _focusedDay2,
+                                  firstDay: DateTime.utc(2020, 12, 31),
+                                  lastDay: DateTime.utc(2030, 12, 31),
+                                  calendarFormat: CalendarFormat.week,
+                                  startingDayOfWeek: StartingDayOfWeek.monday,
+                                  rowHeight: 64,
+                                  daysOfWeekVisible: true,
+                                  selectedDayPredicate: (day) {
+                                    return isSameDay(selectedDay2, day);
+                                  },
+                                  onDaySelected: (selectedDay, focusedDay) {
+                                    _focusedDay2 = focusedDay;
+                                    selectedDay2 = selectedDay;
+                                    endDateController.text =
+                                        DateFormat('yMMMd').format(selectedDay);
+                                    print(endDateController.text);
+                                    setState(() {});
+                                  },
+                                  headerStyle: HeaderStyle(
+                                    titleCentered: true,
+                                    formatButtonVisible: false,
+                                    titleTextStyle: TextStyle(
+                                      color: Color(0xFFFFFFFF),
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 18,
+                                    ),
+                                    leftChevronIcon: Icon(
+                                      Icons.chevron_left,
+                                      color: Color(0xFF658593),
+                                      size: 20,
+                                    ),
+                                    rightChevronIcon: Icon(
+                                      Icons.chevron_right,
+                                      color: Color(0xFF658593),
+                                      size: 20,
+                                    ),
+                                  ),
+                                  daysOfWeekStyle: DaysOfWeekStyle(
+                                    weekdayStyle: TextStyle(
+                                      color: Color(0xFFFFFFFF),
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14,
+                                    ),
+                                    weekendStyle: TextStyle(
+                                      color: Color(0xFFFFFFFF),
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  calendarStyle: CalendarStyle(
+                                    weekendTextStyle: TextStyle(
+                                      color: Color(0xFFFFFFFF),
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14,
+                                    ),
+                                    defaultTextStyle: TextStyle(
+                                      color: Color(0xFFFFFFFF),
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14,
+                                    ),
+                                    todayTextStyle: TextStyle(
+                                      color: Color(0xFFFFFFFF),
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14,
+                                    ),
+                                    outsideTextStyle: TextStyle(
+                                      color: Color(0xFFFFFFFF),
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 10,
+                                    ),
+                                    selectedTextStyle: TextStyle(
+                                      color: Color(0xFF658593),
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16,
+                                    ),
+                                    selectedDecoration: BoxDecoration(
+                                      color: Color(0xFF7CFFB2),
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 16),
+                                  child: TextFormField(
+                                    controller: endDateController,
+                                    focusNode: endDateFocusNode,
+                                    autofocus: true,
+                                    readOnly: true,
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                      hintText: 'End date',
+                                      hintStyle: TextStyle(
+                                        color: Color(0xFF658593),
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 18,
+                                      ),
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0xFF293238),
+                                          width: 2,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(4.0),
+                                          topRight: Radius.circular(4.0),
+                                        ),
+                                      ),
+                                      focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0xFF4b986c),
+                                          width: 2,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(4.0),
+                                          topRight: Radius.circular(4.0),
+                                        ),
+                                      ),
+                                      errorBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0xFFff5963),
+                                          width: 2,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(4.0),
+                                          topRight: Radius.circular(4.0),
+                                        ),
+                                      ),
+                                      focusedErrorBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0xFFff5963),
+                                          width: 2,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(4.0),
+                                          topRight: Radius.circular(4.0),
+                                        ),
+                                      ),
+                                      contentPadding:
+                                          EdgeInsetsDirectional.fromSTEB(
+                                              0, 24, 0, 24),
+                                    ),
+                                    style: TextStyle(
+                                      color: Color(0xFFFFFFFF),
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ),
+                                
                               ],
                             ),
                           ),
