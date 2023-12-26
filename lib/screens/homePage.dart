@@ -90,11 +90,7 @@ class _HomePageState extends State<HomePage> {
       body: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
-          if (responsiveVisibility(
-            context: context,
-            phone: false,
-            tablet: false,
-          ))
+          if (responsiveVisibility(context: context))
             Container(
               width: 100,
               height: 300,
@@ -126,10 +122,7 @@ class _HomePageState extends State<HomePage> {
                               mainAxisSize: MainAxisSize.max,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                if (responsiveVisibility(
-                                  context: context,
-                                  tablet: false,
-                                ))
+                                if (responsiveVisibility(context: context))
                                   Container(
                                     width: 400,
                                     height: 32,
@@ -920,11 +913,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          if (responsiveVisibility(
-            context: context,
-            phone: false,
-            tablet: false,
-          ))
+          if (responsiveVisibility(context: context))
             Container(
               width: 100,
               height: 300,
@@ -932,12 +921,7 @@ class _HomePageState extends State<HomePage> {
                 color: Color(0xFF1D2429),
               ),
             ),
-          if (responsiveVisibility(
-            context: context,
-            phone: false,
-            tablet: false,
-            tabletLandscape: false,
-          ))
+          if (responsiveVisibility(context: context))
             CachedNetworkImage(
               fadeInDuration: Duration(milliseconds: 500),
               fadeOutDuration: Duration(milliseconds: 500),
